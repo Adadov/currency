@@ -6,6 +6,9 @@ function default.get_safe_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec =
 		"size[8,9]"..
+        default.gui_bg..
+        default.gui_bg_img..
+        default.gui_slots..
 		"list[nodemeta:".. spos .. ";main;1,1;6,2;]"..
 		"list[current_player;main;0,5;8,4;]"..
 		"listring[nodemeta:".. spos .. ";main]"..
