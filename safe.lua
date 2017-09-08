@@ -19,7 +19,7 @@ function default.get_safe_formspec(pos, page)
 	return formspec
 end
 
-local function show_safe_form(pos, page)
+local function show_safe_form(clicker, pos, page)
 	minetest.show_formspec(
 		clicker:get_player_name(),
 		"currency:safe",
@@ -28,8 +28,8 @@ local function show_safe_form(pos, page)
 	minetest.register_on_receive_fields(function(player, form, pressed)
 		print("[SAFE] page button pressed: "..dump(pressed))
 		if form=="currency:safe" then
-			if pressed.page1 then show_safe_form(pos, 0) end
-			if pressed.page2 then show_safe_form(pos, 1) end
+			if pressed.page1 then show_safe_form(clicker, pos, 0) end
+			if pressed.page2 then show_safe_form(clicker, pos, 1) end
 		end
 	end)
 end
@@ -66,7 +66,7 @@ minetest.register_node("currency:safe", {
 	on_rightclick = function(pos, node, clicker)
 		local meta = minetest.get_meta(pos)
 		if has_safe_privilege(meta, clicker) then
-			show_safe_form(pos, "page1")
+			show_safe_form(clicker, pos, "page1")
 		end
 	end,
 	after_place_node = function(pos, placer)
