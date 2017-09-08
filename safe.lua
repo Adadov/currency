@@ -5,6 +5,7 @@ local S, NS = dofile(MP.."/intllib.lua")
 function default.get_safe_formspec(pos, page)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local ipos = 50*page
+	local pnum = page+1
 	local formspec =
 		"size[8,11]"..
 		default.gui_bg..
@@ -12,7 +13,7 @@ function default.get_safe_formspec(pos, page)
 		default.gui_slots..
 		"button[1,-0.1;2,1;page1;Page 1]"..
 		"button[5,-0.1;2,1;page2;Page 2]"..
-		"label[3.5,0;1,1;1\/2]"..
+		"label[3.4,0.1;Page "..pnum.." / 2]"..
 		"list[nodemeta:".. spos .. ";main;0,0.9;8,6;"..ipos.."]"..
 		"list[current_player;main;0,7.2;8,4;]"..
 		"listring[nodemeta:".. spos .. ";main]"..
