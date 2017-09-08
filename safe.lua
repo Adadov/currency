@@ -2,8 +2,9 @@
 local MP = minetest.get_modpath(minetest.get_current_modname())
 local S, NS = dofile(MP.."/intllib.lua")
 
-function default.get_safe_formspec(pos)
+function default.get_safe_formspec(pos, page)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
+	local ipos = 50*page
 	local formspec =
 		"size[8,11]"..
 		default.gui_bg..
@@ -11,14 +12,28 @@ function default.get_safe_formspec(pos)
 		default.gui_slots..
 		"button[1,-0.1;2,1;page1;Page 1]"..
 		"button[5,-0.1;2,1;page2;Page 2]"..
-		"list[nodemeta:".. spos .. ";main;0,0.9;8,6;]"..
+		"list[nodemeta:".. spos .. ";main;0,0.9;8,6;"..ipos.."]"..
 		"list[current_player;main;0,7.2;8,4;]"..
 		"listring[nodemeta:".. spos .. ";main]"..
 		"listring[current_player;main]"
 	return formspec
 end
 
---function default.safe_form(pos, page)
+local function show_safe_form(pos, page)
+	minetest.show_formspec(
+		clicker:get_player_name(),
+		"currency:safe",
+		default.get_safe_formspec(pos)
+	)
+	minetest.register_on_receive_fields(function(player, form, pressed)
+		print("[SAFE] page button pressed: "..dump(pressed))
+		if form=="currency:safe" then
+			if pressed.page1 then show_safe_form(pos, 0) end
+			if pressed.page2 then show_safe_form(pos, 1) end
+		end
+	end)
+end
+
 
 
 local function has_safe_privilege(meta, player)
@@ -51,11 +66,7 @@ minetest.register_node("currency:safe", {
 	on_rightclick = function(pos, node, clicker)
 		local meta = minetest.get_meta(pos)
 		if has_safe_privilege(meta, clicker) then
-			minetest.show_formspec(
-				clicker:get_player_name(),
-				"currency:safe",
-				default.get_safe_formspec(pos)
-			)
+			show_safe_form(pos, "page1")
 		end
 	end,
 	after_place_node = function(pos, placer)
