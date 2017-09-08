@@ -25,11 +25,18 @@ local function show_safe_form(clicker, pos, page)
 		"currency:safe",
 		default.get_safe_formspec(pos, page)
 	)
-	minetest.register_on_receive_fields(function(player, form, pressed)
+	minetest.register_on_player_receive_fields(function(clicker, form, pressed)
 		print("[SAFE] page button pressed: "..dump(pressed))
 		if form=="currency:safe" then
-			if pressed.page1 then show_safe_form(clicker, pos, 0) end
-			if pressed.page2 then show_safe_form(clicker, pos, 1) end
+			if pressed.quit then return true end
+			if pressed.page1 then 
+				show_safe_form(clicker, pos, 0)
+				return true
+			end
+			if pressed.page2 then 
+				show_safe_form(clicker, pos, 1) 
+				return true
+			end
 		end
 	end)
 end
