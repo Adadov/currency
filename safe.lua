@@ -12,6 +12,7 @@ function default.get_safe_formspec(pos, page)
 		default.gui_slots..
 		"button[1,-0.1;2,1;page1;Page 1]"..
 		"button[5,-0.1;2,1;page2;Page 2]"..
+		"label[3.5,0;1,1;1\/2]"..
 		"list[nodemeta:".. spos .. ";main;0,0.9;8,6;"..ipos.."]"..
 		"list[current_player;main;0,7.2;8,4;]"..
 		"listring[nodemeta:".. spos .. ";main]"..
@@ -29,12 +30,12 @@ local function show_safe_form(clicker, pos, page)
 		print("[SAFE] page button pressed: "..dump(pressed))
 		if form=="currency:safe" then
 			if pressed.quit then return true end
-			if pressed.page1 then 
+			if pressed.page1 then
 				show_safe_form(clicker, pos, 0)
 				return true
 			end
-			if pressed.page2 then 
-				show_safe_form(clicker, pos, 1) 
+			if pressed.page2 then
+				show_safe_form(clicker, pos, 1)
 				return true
 			end
 		end
