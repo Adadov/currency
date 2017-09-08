@@ -4,7 +4,7 @@ local S, NS = dofile(MP.."/intllib.lua")
 
 function default.get_safe_formspec(pos, page)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
-	local ipos = 50*page
+	local ipos = 48*page
 	local pnum = page+1
 	local formspec =
 		"size[8,11]"..
@@ -75,6 +75,10 @@ minetest.register_node("currency:safe", {
 	on_blast = function() end,
 	on_rightclick = function(pos, node, clicker)
 		local meta = minetest.get_meta(pos)
+		local inv = meta:get_inventory()
+		if inv:get_size("main") ~= 96 then
+			inv:set_size("main", 12*8)
+		end
 		if has_safe_privilege(meta, clicker) then
 			show_safe_form(clicker, pos, 0)
 		end
