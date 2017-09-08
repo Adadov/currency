@@ -72,6 +72,7 @@ minetest.register_node("currency:safe", {
 			"safe_front.png",},
 	is_ground_content = false,
 	groups = {cracky=1},
+	on_blast = function() end,
 	on_rightclick = function(pos, node, clicker)
 		local meta = minetest.get_meta(pos)
 		if has_safe_privilege(meta, clicker) then
