@@ -29,7 +29,7 @@ local function show_safe_form(clicker, pos, page)
 	)
 	minetest.register_on_player_receive_fields(function(clicker, form, pressed)
 		if form=="currency:safe" then
-			print("[SAFE] page button pressed: "..dump(pressed))
+			--print("[SAFE] page button pressed: "..dump(pressed))
 			if pressed.quit then return true end
 			if pressed.page1 then
 				show_safe_form(clicker, pos, 0)
@@ -57,6 +57,27 @@ local function has_safe_privilege(meta, player)
 		return false
 	end
 	return true
+end
+
+local function on_place_node(place_to, newnode,
+	placer, oldnode, itemstack, pointed_thing)
+	-- Run script hook
+	for _, callback in ipairs(minetest.registered_on_placenodes) do
+		-- Deepcopy pos, node and pointed_thing because callback can modify them
+		local place_to_copy = {x = place_to.x, y = place_to.y, z = place_to.z}
+		local newnode_copy =
+			{name = newnode.name, param1 = newnode.param1, param2 = newnode.param2}
+		local oldnode_copy =
+			{name = oldnode.name, param1 = oldnode.param1, param2 = oldnode.param2}
+		local pointed_thing_copy = {
+			type  = pointed_thing.type,
+			above = vector.new(pointed_thing.above),
+			under = vector.new(pointed_thing.under),
+			ref   = pointed_thing.ref,
+		}
+		callback(place_to_copy, newnode_copy, placer,
+			oldnode_copy, itemstack, pointed_thing_copy)
+	end
 end
 
 minetest.register_node("currency:safe", {
